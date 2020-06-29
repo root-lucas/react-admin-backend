@@ -22,7 +22,7 @@ export const adminRoutes = [
         component: Index,
         isShow: true,
         title: "看板",
-        icon:'<AreaChartOutlined />',
+        icon: '<AreaChartOutlined />',
     },
     {
         path: "/admin/products",
@@ -30,10 +30,10 @@ export const adminRoutes = [
         exact: true,
         isShow: true,
         title: "商品管理",
-        icon:'<AppstoreOutlined />',
+        icon: '<AppstoreOutlined />',
     },
     {
-        path: "/admin/products/edit/:id",
+        path: "/admin/products/edit/:id?",  // io设为可选参数
         component: Edit,
         isShow: false,
     }
