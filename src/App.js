@@ -2,10 +2,13 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { adminRoutes } from './routes/index'
 import Frame from './components/Frame/Index'
+import { isLogined } from './utils/auth';
+
 import './App.css'
 
 function App() {
-  return (
+  // 三目运算符检查用户是否登录进行页面跳转
+  return (isLogined() ? (
     <Frame>
       <Switch>
         {
@@ -22,9 +25,10 @@ function App() {
             )
           })
         }
+        <Redirect to={adminRoutes[0].path} from='/admin' />
         <Redirect to='/404' />
       </Switch>
-    </Frame>
+    </Frame>) : (<Redirect to='/login' />)
   );
 }
 

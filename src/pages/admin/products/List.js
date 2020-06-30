@@ -27,7 +27,7 @@ function List(props) {
         {
             title: '序号',
             key: 'id',
-            // dataIndex: 'id',
+            dataIndex: 'id',
             width: 80,
             align: 'center'
         }, {
@@ -55,7 +55,7 @@ function List(props) {
         <Card title='商品列表' extra={
             <Button type='primary' size='small' onClick={() => props.history.push('/admin/products/edit')}
             >新增</Button>}>
-            <Table columns={columns} bordered dataSource={dataSource} />
+            <Table rowKey='id' columns={columns} bordered dataSource={dataSource} />
         </Card>
     )
 }
