@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, Table, Button, Popconfirm } from 'antd'
+import { listApi } from '../../../services/products'
 
 const dataSource = [
     {
@@ -23,6 +24,14 @@ const dataSource = [
 ]
 
 function List(props) {
+
+    useEffect(() => {
+        listApi().then(res => {
+            console.log('获取数据库数据, 如果有的话 = ', res)
+        })
+    }, []);
+
+    // 组件初始化的时候执行
     const columns = [
         {
             title: '序号',

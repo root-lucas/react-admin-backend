@@ -1,15 +1,31 @@
 import React from 'react'
-import { Form, Input, Button, Checkbox, Card } from 'antd';
+import { Form, Input, Button, Checkbox, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { setToken } from '../utils/auth';
+import { loginApi } from '../services/auth'
 import './login.css'
 
 function Login(props) {
     const onFinish = values => {
         if (values) {
-            setToken(values.username)
-            console.log('登录信息 = ', values);
-            props.history.push('/admin')
+            // setToken(values.username)
+            // console.log('登录信息 = ', values);
+            // props.history.push('/admin')
+
+            loginApi({
+                userName: values.username,
+                password: values.password
+            }).then(res => {
+                if (res.code === 'success') {
+                    message.success('登录成功')
+                    setToken(res.token)
+                    props.history.push('/admin')
+                } else {
+                    message.info(res.message)
+                }
+            }).catch(err => {
+                message.error('用户不存在');
+            })
         }
 
     };
