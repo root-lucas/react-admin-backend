@@ -5,7 +5,7 @@ import { get, post, put, del } from "../utils/request";
  * @param {*} page
  */
 export function listApi(page = 1) {
-    return get("/api/v1/admin/products", { page });
+    return get("/api/v1/admin/products", { page, per: 2 });
 }
 
 /**
@@ -14,6 +14,14 @@ export function listApi(page = 1) {
  */
 export function createApi(data) {
     return post("/api/v1/admin/products", data);
+}
+
+/**
+ * 根据id获取获取数据
+ * @param {*} id
+ */
+export function getOneById(id) {
+    return get(`/api/v1/admin/products/${id}`);
 }
 
 /**
