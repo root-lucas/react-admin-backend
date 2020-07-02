@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Card, Input, Button, message } from 'antd';
+import { Form, Card, Input, Button, message, Upload } from 'antd';
 import { createApi, getOneById, modifyOne } from '../../../services/products'
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons'
+import { serverUrl } from '../../../utils/config'
 
 function Edit(props) {
     // console.log('edit props = ', props)
@@ -17,6 +19,27 @@ function Edit(props) {
     ]);
 
     const [currentData, setCurrentData] = useState({});
+    const [imageUrl, setImageUrl] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const handleChange = (info) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            setLoading(false)
+            console.log('uploadFile info = ', info)
+            setImageUrl(info.file.response.info)
+        }
+    }
+
+    const uploadButton = (
+        <div>
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div className="ant-upload-text">Upload</div>
+        </div>
+    );
 
     // 初始化的时候执行
     useEffect(() => {
@@ -25,6 +48,8 @@ function Edit(props) {
                 .then(res => {
                     console.log('edit res1 = ', res)
                     setCurrentData(res)
+                    // 进入修改页面后依旧显示图片
+                    setImageUrl(res.coverImg)
                     console.log('edit res2 = ', currentData)
                 })
         }
@@ -43,10 +68,10 @@ function Edit(props) {
     // 成功回调
     const onFinish = (values) => {
         if (values) {
-            // console.log('success = ', values);
+            console.log('success = ', values);
             if (props.match.params.id) {
                 // 修改商品
-                modifyOne(props.match.params.id, values)
+                modifyOne(props.match.params.id, { ...values, coverImg: imageUrl })
                     .then(res => {
                         console.log('修改商品 = ', res)
                         props.history.push('/admin/products')
@@ -56,7 +81,7 @@ function Edit(props) {
                     })
             } else {
                 // 新建商品
-                createApi(values).then(res => {
+                createApi({ ...values, coverImg: imageUrl }).then(res => {
                     console.log('新建商品 = ', res)
                     props.history.push('/admin/products')
                 }).catch(err => {
@@ -128,6 +153,26 @@ function Edit(props) {
                     initialValue={currentData.price}
                 >
                     <Input placeholder='请输入商品价格' />
+                </Form.Item>
+                <Form.Item label='主图'>
+                    <Upload
+                        name='file'
+                        className='avatar-uploader'
+                        showUploadList={false}
+                        action={serverUrl + "/api/v1/common/file_upload"}
+                        listType="picture-card"
+                        onChange={(info) => handleChange(info)}
+                    >
+                        {imageUrl ? (
+                            <img
+                                src={serverUrl + imageUrl}
+                                alt="avatar"
+                                style={{ width: "100%" }}
+                            />
+                        ) : (
+                                uploadButton
+                            )}
+                    </Upload>
                 </Form.Item>
                 <Form.Item>
                     <Button htmlType='submit' type='primary'>保存</Button>
