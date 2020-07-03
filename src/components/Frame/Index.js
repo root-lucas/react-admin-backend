@@ -93,6 +93,6 @@ function Index(props) {
     )
 }
 
-const mapStateToProps = state => state
+const mapStateToProps = state => state.notice
 
 export default connect(mapStateToProps)(withRouter(Index))

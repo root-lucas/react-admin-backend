@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Card, Table, Button, Popconfirm } from 'antd'
 import { listApi, delOne, modifyOne } from '../../../services/products'
 import { serverUrl } from '../../../utils/config'
+import { connect } from 'react-redux'
+import { loadProduct } from '../../../store/actions/product'
 import './list.css'
 
 // const dataSource = [
@@ -26,27 +28,44 @@ import './list.css'
 // ]
 
 function List(props) {
+    console.log('List props = ', props)
     // 定义局部状态
-    const [dataSource, setDataSource] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);  // 用以保存当前页,避免删除和商品上架跳转到第一页
+    // const [dataSource, setDataSource] = useState([]);
+    // const [total, setTotal] = useState(0);
+    // const [currentPage, setCurrentPage] = useState(1);  // 用以保存当前页,避免删除和商品上架跳转到第一页
+
+    const { list, page, total } = props
 
     useEffect(() => {
-        listApi().then(res => {
-            // console.log('获取数据库数据, 如果有的话 = ', res)
-            setDataSource(res.products)
-            setTotal(res.totalCount)
-        })
+        props.dispatch(
+            // 使用对象作为参数
+            loadProduct({
+                page: 1,
+                // name: '小米'
+            })
+        )
+        // listApi().then(res => {
+        //     // console.log('获取数据库数据, 如果有的话 = ', res)
+        //     setDataSource(res.products)
+        //     setTotal(res.totalCount)
+        // })
     }, []);
 
-    const loadData = (page) => {
+    const loadData = () => {
         // console.log('page = ', page)
-        listApi(page).then(res => {
-            // console.log('获取数据库数据, 如果有的话 = ', res)
-            setDataSource(res.products)
-            setTotal(res.totalCount)
-            setCurrentPage(page)
-        })
+        // listApi(page).then(res => {
+        //     // console.log('获取数据库数据, 如果有的话 = ', res)
+        //     setDataSource(res.products)
+        //     setTotal(res.totalCount)
+        //     setCurrentPage(page)
+        // })
+        props.dispatch(
+            // 使用对象作为参数
+            loadProduct({
+                page: page,
+                // name: '小米'
+            })
+        )
     }
 
     // 组件初始化的时候执行
@@ -88,7 +107,7 @@ function List(props) {
                             onConfirm={() => {
                                 console.log('用户确认删除')
                                 delOne(record._id).then(res => {
-                                    loadData(currentPage)
+                                    loadData()
                                 })
                             }
                             }
@@ -97,7 +116,7 @@ function List(props) {
                         </Popconfirm>
                         <Button size='small' onClick={() => {
                             modifyOne(record._id, { onSale: !record.onSale }).then(res => {
-                                loadData(currentPage)  // 修改上下架后在原页面重新加载
+                                loadData()  // 修改上下架后在原页面重新加载
                             })
                         }}>{record.onSale ? '下架' : '上架'}</Button>
                     </div >
@@ -110,9 +129,23 @@ function List(props) {
         <Card title='商品列表' extra={
             <Button type='primary' size='small' onClick={() => props.history.push('/admin/products/edit')}
             >新增</Button>}>
-            <Table rowKey='_id' rowClassName={record => record.onSale ? "" : "bg-red"} pagination={{ total, defaultPageSize: 2, onChange: loadData }} columns={columns} bordered dataSource={dataSource} />
+            <Table
+                rowKey='_id'
+                rowClassName={record => record.onSale ? "" : "bg-red"}
+                pagination={{
+                    total,
+                    defaultPageSize: 2,
+                    onChange: (p) => {
+                        props.dispatch(loadProduct({ page: p }))
+                    }
+                }}
+                columns={columns}
+                bordered
+                dataSource={list}
+            />
         </Card>
     )
 }
 
-export default List
+// 只映射product
+export default connect(state => state.product)(List)

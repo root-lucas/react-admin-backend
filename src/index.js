@@ -7,7 +7,7 @@ import App from './App';
 import { mainRoutes } from './routes/index';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
-import store from './store';
+import store from './store/index';
 
 ReactDOM.render(
   <Provider store={store}>
