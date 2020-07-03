@@ -3,6 +3,10 @@ import { Form, Card, Input, Button, message, Upload } from 'antd';
 import { createApi, getOneById, modifyOne } from '../../../services/products'
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons'
 import { serverUrl } from '../../../utils/config'
+// 引入编辑器组件
+import BraftEditor from 'braft-editor'
+// 引入编辑器样式
+import 'braft-editor/dist/index.css'
 
 function Edit(props) {
     // console.log('edit props = ', props)
@@ -21,6 +25,12 @@ function Edit(props) {
     const [currentData, setCurrentData] = useState({});
     const [imageUrl, setImageUrl] = useState('')
     const [loading, setLoading] = useState(false)
+    const [editorState, setEditorState] = useState(BraftEditor.createEditorState(''));
+
+    // 富文本编辑器
+    const handleEditorChange = (editContent) => {
+        setEditorState(editContent)
+    }
 
     const handleChange = (info) => {
         if (info.file.status === 'uploading') {
@@ -46,11 +56,10 @@ function Edit(props) {
         if (props.match.params.id) {
             getOneById(props.match.params.id)
                 .then(res => {
-                    console.log('edit res1 = ', res)
                     setCurrentData(res)
                     // 进入修改页面后依旧显示图片
                     setImageUrl(res.coverImg)
-                    console.log('edit res2 = ', currentData)
+                    setEditorState(BraftEditor.createEditorState(res.content))
                 })
         }
     }, [])
@@ -67,11 +76,13 @@ function Edit(props) {
 
     // 成功回调
     const onFinish = (values) => {
+        // editorState.toHTML()获取当前富文本的内容
+        console.log('editorState.toHTML() = ', editorState.toHTML())
         if (values) {
             console.log('success = ', values);
             if (props.match.params.id) {
                 // 修改商品
-                modifyOne(props.match.params.id, { ...values, coverImg: imageUrl })
+                modifyOne(props.match.params.id, { ...values, coverImg: imageUrl, content: editorState.toHTML() })
                     .then(res => {
                         console.log('修改商品 = ', res)
                         props.history.push('/admin/products')
@@ -81,7 +92,7 @@ function Edit(props) {
                     })
             } else {
                 // 新建商品
-                createApi({ ...values, coverImg: imageUrl }).then(res => {
+                createApi({ ...values, coverImg: imageUrl, content: editorState.toHTML() }).then(res => {
                     console.log('新建商品 = ', res)
                     props.history.push('/admin/products')
                 }).catch(err => {
@@ -173,6 +184,12 @@ function Edit(props) {
                                 uploadButton
                             )}
                     </Upload>
+                </Form.Item>
+                <Form.Item label='详情'>
+                    <BraftEditor
+                        value={editorState}
+                        onChange={(e) => handleEditorChange(e)}
+                    />
                 </Form.Item>
                 <Form.Item>
                     <Button htmlType='submit' type='primary'>保存</Button>
