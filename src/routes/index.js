@@ -4,6 +4,7 @@ import Index from "../pages/admin/dashboard/Index";
 import List from "../pages/admin/products/List";
 import Edit from "../pages/admin/products/Edit";
 // import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import Notice from '../pages/admin/notices/Index';
 
 export const mainRoutes = [
     {
@@ -35,6 +36,11 @@ export const adminRoutes = [
     {
         path: "/admin/products/edit/:id?",  // io设为可选参数
         component: Edit,
+        isShow: false,
+    },
+    {
+        path: "/admin/notices",  // io设为可选参数
+        component: Notice,
         isShow: false,
     }
 ];

@@ -1,10 +1,11 @@
 import React from 'react'
-import { Layout, Menu, Dropdown, Avatar, message } from 'antd';
+import { Layout, Menu, Dropdown, Avatar, message, Badge } from 'antd';
 import { AppstoreOutlined, UserOutlined, DownOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import logo from './logo192.png'
 import { adminRoutes } from '../../routes/index';
 import { clearToken } from "../../utils/auth";
+import { connect } from 'react-redux'
 import './frame.css'
 
 // const { SubMenu } = Menu;
@@ -13,6 +14,7 @@ const { Header, Content, Sider } = Layout;
 const routes = adminRoutes.filter(route => route.isShow)
 
 function Index(props) {
+    // console.log('Frame props = ', props);
     const popMenu = (
         <Menu
             onClick={(p) => {
@@ -22,7 +24,7 @@ function Index(props) {
                 } else {
                     message.info(p.key); // tip
                     if ((p.key = "notice")) {
-                        props.history.push("/admin/notices");
+                        props.history.push("/admin/notices"); // 跳转至通知中心
                     }
                 }
             }}>
@@ -41,7 +43,7 @@ function Index(props) {
                 <Dropdown overlay={popMenu}>
                     <div>
                         <Avatar size="small" icon={<UserOutlined />} />
-                        <span style={{ color: '#fff', margin: '0 5px' }}>超级管理员</span>
+                        <Badge dot={!props.isAllRead}><span style={{ color: '#fff', margin: '0 5px' }}>超级管理员</span></Badge>
                         <DownOutlined />
                     </div>
                 </Dropdown>
@@ -91,4 +93,6 @@ function Index(props) {
     )
 }
 
-export default withRouter(Index)
+const mapStateToProps = state => state
+
+export default connect(mapStateToProps)(withRouter(Index))
