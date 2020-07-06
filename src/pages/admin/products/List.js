@@ -35,12 +35,13 @@ function List(props) {
     // const [currentPage, setCurrentPage] = useState(1);  // 用以保存当前页,避免删除和商品上架跳转到第一页
 
     const { list, page, total } = props
+    // console.log('List props2 = ', list.length)
 
     useEffect(() => {
         props.dispatch(
             // 使用对象作为参数
             loadProduct({
-                page: 1,
+                page: page,
                 // name: '小米'
             })
         )
@@ -135,6 +136,7 @@ function List(props) {
                 pagination={{
                     total,
                     defaultPageSize: 2,
+                    defaultCurrent: page,
                     onChange: (p) => {
                         props.dispatch(loadProduct({ page: p }))
                     }
