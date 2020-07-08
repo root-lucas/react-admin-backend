@@ -14,7 +14,7 @@ function Index(props) {
     return (
         <Card title='通知中心' extra={<Button onClick={() => props.dispatch({
             type: 'READ_ALL'
-        })}>全部已读</Button>}>
+        })}>{props.isAllRead ? '全部已读' : '全部未读'}</Button>}>
             <List
                 header={<div>Header</div>}
                 footer={<div>Footer</div>}
@@ -25,7 +25,7 @@ function Index(props) {
                         style={{ display: "flex", alignContent: "spaced-between" }}
                     >
                         <Typography.Text mark>[ITEM]</Typography.Text> {item}
-                        <Button size="small">已读</Button>
+                        <Button size="small">{props.isAllRead ? '已读' : '未读'}</Button>
                     </List.Item>
                 )}
             ></List>
@@ -33,4 +33,4 @@ function Index(props) {
     )
 }
 
-export default connect(state => state)(Index)
+export default connect(state => state.notice)(Index)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Form, Card, Input, Button, message, Upload } from 'antd';
 import { createApi, getOneById, modifyOne } from '../../../services/products'
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons'
@@ -12,17 +12,18 @@ function Edit(props) {
     // console.log('edit props = ', props)
     // props.match.params.id 存在的话表示修改，否怎为新增
 
-    const [fields, setFields] = useState([
-        {
-            name: ['name'],
-            value: '',
-        }, {
-            name: ['price'],
-            value: '',
-        },
-    ]);
+    // const [fields, setFields] = useState([
+    //     {
+    //         name: ['name'],
+    //         // value: '',
+    //     }, {
+    //         name: ['price'],
+    //         // value: '',
+    //     },
+    // ]);
 
-    const [currentData, setCurrentData] = useState({});
+    // const [currentData, setCurrentData] = useState({});
+    const formRef = useRef(null)
     const [imageUrl, setImageUrl] = useState('')
     const [loading, setLoading] = useState(false)
     const [editorState, setEditorState] = useState(BraftEditor.createEditorState(''));
@@ -56,18 +57,22 @@ function Edit(props) {
         if (props.match.params.id) {
             getOneById(props.match.params.id)
                 .then(res => {
-                    setCurrentData(res)
+                    // setCurrentData(res)
                     // 进入修改页面后依旧显示图片
                     setImageUrl(res.coverImg)
                     setEditorState(BraftEditor.createEditorState(res.content))
+                    formRef.current.setFieldsValue({
+                        name: res.name,
+                        price: res.price
+                    })
                 })
         }
-    }, [])
+    }, [props.match.params.id])
 
     const priceValidate = (rule, value, callback) => {
         // value *1 转成数字
         if (value * 1 > 10000) {
-            return callback('价格不能大于1000')
+            return callback('价格不能大于10000')
         } else {
             // console.log('currentData = ',currentData)
             return callback()
@@ -120,11 +125,13 @@ function Edit(props) {
             <Form
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                fields={fields}
-                onFieldsChange={(changedFields, allFields) => {
-                    setFields(allFields);
-                }}
-                onValuesChange={(e) => { console.log('=====', e[0]) }}
+                ref={formRef}
+            // fields={fields}
+            // onFieldsChange={(changedFields, allFields) => {
+            //     setFields(allFields);
+            // }}
+            // onValuesChange={(e) => { console.log('=====', e[0]) }}
+            // initialValues={{name:'123',price:currentData.price}}
             >
                 <Form.Item
                     name="name"
@@ -135,7 +142,7 @@ function Edit(props) {
                             message: "请输入商品名字"
                         },
                     ]}
-                    initialValue={currentData.name}
+                // initialValue={currentData.name}
                 >
                     <Input placeholder='请输入商品名字' />
                 </Form.Item>
@@ -161,7 +168,7 @@ function Edit(props) {
                         //     },
                         // }),
                     ]}
-                    initialValue={currentData.price}
+                // initialValue={currentData.price}
                 >
                     <Input placeholder='请输入商品价格' />
                 </Form.Item>
