@@ -1,69 +1,58 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## React + Antd 打造在线商城管理系统
 
-## Available Scripts
+使用方法：
 
-In the project directory, you can run:
+```js
+// 安装依赖
+yarn add
+或者
+npm install
 
-### `yarn start`
+// 运行
+yarn run dev
+或者
+npm run dev
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 功能实现目录
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+1. 项目搭建，安装插件需要的插件
+2. 页面和目录搭建
+3. 编写路由文件
+4. 管理后台页面框架搭建
+5. 管理后台列表页面搭建
+6. 管理后台表单页面搭建
+7. 退出和登录页面开发
+8. 登录判断
+9. 使用 axios 对接服务器端 api 接口
+10. 网络请求封装
+11. 列表数据接口对接
+12. 数据新增功能实现
+13. 数据修改功能实现
+14. 数据删除功能实现
+15. 表单功能完善-图片上传
+16. 使用 redux 优化用户登录逻辑
+17. 完善通知中心内容
+18. 完善 dashboard 页面样式
 
-### `yarn test`
+### 项目中使用到的其他插件
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+项目中使用到的插件列出如下
 
-### `yarn build`
+```bash
+antd 			    #UI组件4.xx版本
+react-router-dom     #路由
+rudex			    #redux核心库
+react-redux          #react中集成redux的插件
+redux-thunk          #redux插件
+axios                #网络请求
+braft-editor         #富文本编辑器
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 服务器端 API 接口
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+与该项目对接的服务器端 API 接口使用`express+mongodb`实现。
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+[服务端项目跳转](https://github.com/root-lucas/admin-backend-server)
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-# React-admin-backend
+[服务端API接口使用文档](https://github.com/root-lucas/admin-backend-server/blob/master/api使用文档.md)
